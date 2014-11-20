@@ -121,13 +121,6 @@ RUN su hduser -c "$HADOOP_HOME/bin/hdfs namenode -format"
 ADD services/start-hadoop.sh ./start-hadoop.sh
 RUN mv ./start-hadoop.sh /usr/local/hadoop/bin/start-hadoop.sh
 
-# HDFS ports
-EXPOSE 50070 50470 9000 50075 50475 50010 50020 50090
-
-# YARN ports
-EXPOSE 8088 8032 50060
-
-
 # Git clone edx-analytics-pipeline
 RUN apt-get install -y git python-pip python-dev mysql-server-5.6
 RUN cd / ; git clone -b gabe/docker-experiment https://github.com/edx/edx-analytics-pipeline
@@ -140,6 +133,7 @@ RUN cd edx-analytics-pipeline ; WHEEL_PYVER=2.7 WHEEL_URL=http://edx-wheelhouse.
 # Configure LUIGI
 ADD config/luigi-client.cfg ./luigi-client.cfg
 RUN mkdir -p /etc/luigi ; mv ./luigi-client.cfg /etc/luigi/client.cfg
+RUN cd edx-analytics-pipeline ; cp config/docker.cfg override.cfg 
 
 # Build Hive
 ADD packages/hive-0.11.0-bin.tar.gz ./hive-0.11.0-bin.tar.gz
@@ -158,12 +152,21 @@ ENV SQOOP_LIB $SQOOP_HOME/lib
 ADD packages/sqoop-1.4.5.bin__hadoop-2.0.4-alpha.tar.gz ./sqoop-1.4.5.bin__hadoop-2.0.4-alpha.tar.gz
 RUN mv ./sqoop-1.4.5.bin__hadoop-2.0.4-alpha.tar.gz/sqoop-1.4.5.bin__hadoop-2.0.4-alpha $SQOOP_HOME
 RUN rm -rf ./sqoop-1.4.5.bin__hadoop-2.0.4-alpha.tar.gz
+RUN sudo ln -s $SQOOP_HOME/bin/sqoop /usr/bin/sqoop
 
 # Build mysql connector
 ADD packages/mysql-connector-java-5.1.29.tar.gz ./mysql-connector-java-5.1.29.tar.gz
 RUN mkdir -p $SQOOP_LIB
 RUN mv ./mysql-connector-java-5.1.29.tar.gz/mysql-connector-java-5.1.29/mysql-connector-java-5.1.29-bin.jar $SQOOP_LIB/
-RUN sudo ln -s $SQOOP_HOME/bin/sqoop /usr/bin/sqoop
-RUN rm -rf ./sqoop-1.4.5.bin__hadoop-2.0.4-alpha.tar.gz
+
+# Start the mysql server
+RUN service mysql start
+
+# HDFS ports
+EXPOSE 50070 50470 9000 50075 50475 50010 50020 50090
+
+# YARN ports
+EXPOSE 8088 8032 50060
 
 CMD ["/bin/bash", "start-hadoop.sh"]
+
