@@ -141,4 +141,15 @@ RUN cd edx-analytics-pipeline ; WHEEL_PYVER=2.7 WHEEL_URL=http://edx-wheelhouse.
 ADD config/luigi-client.cfg ./luigi-client.cfg
 RUN mkdir -p /etc/luigi ; mv ./luigi-client.cfg /etc/luigi/client.cfg
 
+# Build Hive
+ADD packages/hive-0.11.0-bin.tar.gz ./hive-0.11.0-bin.tar.gz
+RUN mv ./hive-0.11.0-bin.tar.gz/hive-0.11.0-bin /opt
+RUN rm -rf ./hive-0.11.0-bin.tar.gz
+
+# Configure Hive
+ENV HIVE_HOME /opt/hive-0.11.0-bin
+ENV PATH $HIVE_HOME/bin:$PATH
+RUN echo "export HIVE_HOME=$HIVE_HOME" >> /home/hduser/.bashrc
+RUN echo "export PATH=$PATH" >> /home/hduser/.bashrc
+
 CMD ["/bin/bash", "start-hadoop.sh"]
