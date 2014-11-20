@@ -1,10 +1,8 @@
 #
-# Copyright (c) 2014 Sticksnleaves
-#
-# Apache Hadoop 2.3.0 single node install
+# Open edX Analytics Pipeline Dockerfile (Hadoop 2.3.0)
 #
 
-FROM ubuntu:12.10
+FROM ubuntu:14.04
 MAINTAINER Anthony Smith
 
 # Prepare the operating system
@@ -39,7 +37,6 @@ RUN mkdir /var/run/sshd
 RUN su hduser -c "ssh-keygen -t rsa -f ~/.ssh/id_rsa -P ''"
 RUN su hduser -c "cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys"
 ADD config/ssh_config ./ssh_config
-RUN mv ./ssh_config /home/hduser/.ssh/config
 
 # Setup Hadoop
 ENV HADOOP_HOME /usr/local/hadoop
@@ -99,7 +96,7 @@ RUN rm -rf protobuf-2.5.0*
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/lib
 
 # Build Hadoop Common
-ADD packages/hadoop-common-release-2.3.0.tar.gz ./hadoop-common-release-2.3.0.tar.gz 
+ADD packages/hadoop-common-release-2.3.0.tar.gz ./hadoop-common-release-2.3.0.tar.gz
 RUN cd hadoop-common-release-2.3.0.tar.gz/hadoop-common-release-2.3.0/hadoop-common-project ; mvn package -X -Pnative -DskipTests
 RUN mv $HADOOP_HOME/lib/native/libhadoop.a $HADOOP_HOME/lib/native/libhadoop32.a
 RUN mv $HADOOP_HOME/lib/native/libhadoop.so $HADOOP_HOME/lib/native/libhadoop32.so
@@ -128,5 +125,19 @@ EXPOSE 50070 50470 9000 50075 50475 50010 50020 50090
 
 # YARN ports
 EXPOSE 8088 8032 50060
+
+
+# Git clone edx-analytics-pipeline
+RUN apt-get install -y git python-pip python-dev
+RUN cd / ; git clone -b gabe/docker-experiment https://github.com/edx/edx-analytics-pipeline
+RUN cd edx-analytics-pipeline ; WHEEL_PYVER=2.7 WHEEL_URL=http://edx-wheelhouse.s3-website-us-east-1.amazonaws.com/Ubuntu/precise make system-requirements install
+
+# prepare HDFS storage
+
+#RUN sudo -u hduser /usr/local/hadoop/bin/hdfs dfs -mkdir /data
+
+# Configure LUIGI
+ADD config/luigi-client.cfg ./luigi-client.cfg
+RUN mv ./luigi-client.cfg /etc/luigi/client.cfg
 
 CMD ["/bin/bash", "start-hadoop.sh"]
