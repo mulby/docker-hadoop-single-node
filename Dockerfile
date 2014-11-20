@@ -152,4 +152,18 @@ ENV PATH $HIVE_HOME/bin:$PATH
 RUN echo "export HIVE_HOME=$HIVE_HOME" >> /home/hduser/.bashrc
 RUN echo "export PATH=$PATH" >> /home/hduser/.bashrc
 
+# Build Sqoop
+ENV SQOOP_HOME /usr/lib/sqoop
+ENV SQOOP_LIB $SQOOP_HOME/lib
+ADD packages/sqoop-1.4.5.bin__hadoop-2.0.4-alpha.tar.gz ./sqoop-1.4.5.bin__hadoop-2.0.4-alpha.tar.gz
+RUN mv ./sqoop-1.4.5.bin__hadoop-2.0.4-alpha.tar.gz/sqoop-1.4.5.bin__hadoop-2.0.4-alpha $SQOOP_HOME
+RUN rm -rf ./sqoop-1.4.5.bin__hadoop-2.0.4-alpha.tar.gz
+
+# Build mysql connector
+ADD packages/mysql-connector-java-5.1.29.tar.gz ./mysql-connector-java-5.1.29.tar.gz
+RUN mkdir -p $SQOOP_LIB
+RUN mv ./mysql-connector-java-5.1.29.tar.gz/mysql-connector-java-5.1.29/mysql-connector-java-5.1.29-bin.jar $SQOOP_LIB/
+RUN sudo ln -s $SQOOP_HOME/bin/sqoop /usr/bin/sqoop
+RUN rm -rf ./sqoop-1.4.5.bin__hadoop-2.0.4-alpha.tar.gz
+
 CMD ["/bin/bash", "start-hadoop.sh"]
