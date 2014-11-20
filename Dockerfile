@@ -128,7 +128,7 @@ EXPOSE 8088 8032 50060
 
 
 # Git clone edx-analytics-pipeline
-RUN apt-get install -y git python-pip python-dev
+RUN apt-get install -y git python-pip python-dev mysql-server-5.6
 RUN cd / ; git clone -b gabe/docker-experiment https://github.com/edx/edx-analytics-pipeline
 RUN cd edx-analytics-pipeline ; WHEEL_PYVER=2.7 WHEEL_URL=http://edx-wheelhouse.s3-website-us-east-1.amazonaws.com/Ubuntu/precise make system-requirements install
 
