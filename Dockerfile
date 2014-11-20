@@ -37,6 +37,7 @@ RUN mkdir /var/run/sshd
 RUN su hduser -c "ssh-keygen -t rsa -f ~/.ssh/id_rsa -P ''"
 RUN su hduser -c "cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys"
 ADD config/ssh_config ./ssh_config
+RUN mv ./ssh_config /home/hduser/.ssh/config
 
 # Setup Hadoop
 ENV HADOOP_HOME /usr/local/hadoop
