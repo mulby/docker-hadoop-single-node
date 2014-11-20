@@ -138,6 +138,6 @@ RUN cd edx-analytics-pipeline ; WHEEL_PYVER=2.7 WHEEL_URL=http://edx-wheelhouse.
 
 # Configure LUIGI
 ADD config/luigi-client.cfg ./luigi-client.cfg
-RUN mv ./luigi-client.cfg /etc/luigi/client.cfg
+RUN mkdir -p /etc/luigi ; mv ./luigi-client.cfg /etc/luigi/client.cfg
 
 CMD ["/bin/bash", "start-hadoop.sh"]
