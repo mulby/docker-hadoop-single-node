@@ -69,11 +69,19 @@ RUN bash -c /tmp/build-edx-analytics-data-api.sh
 ADD build/build-edx-analytics-dashboard.sh /tmp/
 RUN bash -c /tmp/build-edx-analytics-dashboard.sh
 
+# Build logwatch (waiting for file into /var/run/logwatch)
+ADD build/build-logwatch.sh /tmp/
+ADD config/demokey /
+ADD config/demokey.pub /
+RUN bash -c /tmp/build-logwatch.sh
+ADD services/start-logwatch.sh /
+
 # HDFS ports (50070 50470 9000 50075 50475 50010 50020 50090)
 # YARN ports (8088 8032 50060)
 # data api (8000)
-# dashboard (9022)
-EXPOSE 50070 50470 9000 50075 50475 50010 50020 50090 8000 9000
+# dashboard (9000)
+# SSH (22)
+EXPOSE 22 50070 50470 9000 50075 50475 50010 50020 50090 8000 9000
 
 # global loop script
 ADD services/start-edx-analytics.sh ./start-edx-analytics.sh
