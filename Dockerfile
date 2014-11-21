@@ -130,9 +130,6 @@ RUN apt-get install -y git python-pip python-dev
 RUN cd /opt ; git clone -b gabe/docker-experiment https://github.com/edx/edx-analytics-pipeline
 RUN cd /opt/edx-analytics-pipeline ; WHEEL_PYVER=2.7 WHEEL_URL=http://edx-wheelhouse.s3-website-us-east-1.amazonaws.com/Ubuntu/precise make system-requirements install
 
-# prepare HDFS storage
-#RUN sudo -u hduser /usr/local/hadoop/bin/hdfs dfs -mkdir /data
-
 # Configure LUIGI
 ADD config/luigi-client.cfg ./luigi-client.cfg
 RUN mkdir -p /etc/luigi
