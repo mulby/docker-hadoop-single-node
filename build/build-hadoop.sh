@@ -6,6 +6,19 @@ function DBG {
 
 DBG "Starting"
 
+# Setup Hadoop
+cd /
+if [ ! -f "hadoop-2.3.0.tar.gz" ]; then
+	wget https://archive.apache.org/dist/hadoop/core/hadoop-2.3.0/hadoop-2.3.0.tar.gz
+fi
+tar zxvf hadoop-2.3.0.tar.gz
+mv hadoop-2.3.0 /usr/local/hadoop-2.3.0
+ln -s /usr/local/hadoop-2.3.0 $HADOOP_HOME
+rm -rf hadoop-2.3.0*
+mkdir $HADOOP_HOME/logs
+mkdir -p $HADOOP_DATA/2.3.0/data $HADOOP_DATA/current/data
+ln -s $HADOOP_DATA/2.3.0/data $HADOOP_DATA/current/data
+
 # Export Hadoop environment variables
 echo "export JAVA_HOME=$JAVA_HOME" >> /home/hduser/.bashrc
 echo "export HADOOP_HOME=$HADOOP_HOME" >> /home/hduser/.bashrc
@@ -16,7 +29,7 @@ echo "export HADOOP_HDFS_HOME=$HADOOP_HDFS_HOME" >> /home/hduser/.bashrc
 echo "export YARN_HOME=$YARN_HOME" >> /home/hduser/.bashrc
 
 # Configure HDFS
-cd /
+DBG "`ls -l /usr/local/hadoop`"
 rm -f $HADOOP_HOME/etc/hadoop/core-site.xml $HADOOP_HOME/etc/hadoop/hdfs-site.xml $HADOOP_HOME/etc/hadoop/hadoop-env.sh
 mv ./core-site.xml $HADOOP_HOME/etc/hadoop/core-site.xml
 mv ./hdfs-site.xml $HADOOP_HOME/etc/hadoop/hdfs-site.xml
@@ -35,6 +48,7 @@ cd protobuf-2.5.0 ; \
 	./configure --prefix=/usr/local ; \
 	make ; \
 	make install
+cd /
 rm -rf protobuf-2.5.0*
 
 # Build Hadoop Common
