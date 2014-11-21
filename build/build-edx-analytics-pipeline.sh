@@ -40,7 +40,8 @@ mv ./mysql-connector-java-5.1.29/mysql-connector-java-5.1.29-bin.jar $SQOOP_LIB/
 sudo ln -s $SQOOP_HOME/bin/sqoop /usr/bin/sqoop
 rm -rf ./mysql-connector-java-5.1.29*
 
-cd /
+# Build hadoop utils
+cd /opt
 git clone https://github.com/mulby/edx-analytics-hadoop-util
 cd edx-analytics-hadoop-util
 javac -cp `$HADOOP_HOME/bin/hadoop classpath` org/edx/hadoop/input/ManifestTextInputFormat.java
