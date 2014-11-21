@@ -12,18 +12,18 @@ RUN apt-get upgrade -y
 # Install dependencies
 RUN apt-get install -y llvm-gcc build-essential make cmake automake autoconf libtool zlib1g-dev
 
-# Add build scripts
-ADD build/ /tmp/
-
 # Build Fuse
+ADD build/build-fuse.sh /tmp/
 RUN bash -c /tmp/build-fuse.sh
 
 ### Build Java deps
 ENV JAVA_HOME /usr/lib/jvm/jdk
+ADD build/build-java.sh /tmp/
 RUN bash -c /tmp/build-java.sh
 
 ### Build Hadoop user + OpenSSH
 ADD config/ssh_config ./ssh_config
+ADD build/build-openssh+hduser.sh /tmp/
 RUN bash -c /tmp/build-openssh+hduser.sh
 
 ### Build Hadoop (friends and family...)
@@ -47,6 +47,8 @@ ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/lib
 # Copy start-hadoop script
 ADD services/start-hadoop.sh ./start-hadoop.sh
 #RUN mv ./start-hadoop.sh /usr/local/hadoop/bin/start-hadoop.sh
+ADD packages/hadoop-2.3.0.tar.gz
+ADD build/build-hadoop.sh /tmp/
 RUN bash -c /tmp/build-hadoop.sh
 
 # Build edx-analytics-pipeline (+ luigi conf)
@@ -55,19 +57,22 @@ ENV HIVE_HOME /opt/hive-0.11.0-bin
 ENV PATH $HIVE_HOME/bin:$PATH
 ENV SQOOP_HOME /usr/lib/sqoop
 ENV SQOOP_LIB $SQOOP_HOME/lib
+ADD build/build-edx-analytics-pipeline.sh /tmp/
 RUN bash -c /tmp/build-edx-analytics-pipeline.sh
 
 # Build edx-analytics-data-api
+ADD build/build-edx-analytics-data-api.sh /tmp/
 RUN bash -c /tmp/build-edx-analytics-data-api.sh
 
-# Build edx-insights
-RUN bash -c /tmp/build-edx-insights.sh
+# Build edx-analytics-dashboard
+ADD build/build-edx-analytics-dashboard.sh /tmp/
+RUN bash -c /tmp/build-edx-analytics-dashboard.sh
 
 # HDFS ports (50070 50470 9000 50075 50475 50010 50020 50090)
 # YARN ports (8088 8032 50060)
 # data api (8000)
-# insights (9022)
-EXPOSE 50070 50470 9000 50075 50475 50010 50020 50090 8000 9022
+# dashboard (9022)
+EXPOSE 50070 50470 9000 50075 50475 50010 50020 50090 8000 9000
 
 # global loop script
 ADD services/start-edx-analytics.sh ./start-edx-analytics.sh
