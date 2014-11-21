@@ -42,7 +42,7 @@ RUN mv ./ssh_config /home/hduser/.ssh/config
 # Setup Hadoop
 ENV HADOOP_HOME /usr/local/hadoop
 ENV HADOOP_DATA /var/lib/hadoop
-RUN wget http://www.eng.lsu.edu/mirrors/apache/hadoop/common/hadoop-2.3.0/hadoop-2.3.0.tar.gz
+RUN wget https://archive.apache.org/dist/hadoop/core/hadoop-2.3.0/hadoop-2.3.0.tar.gz
 RUN tar zxvf hadoop-2.3.0.tar.gz
 RUN mv hadoop-2.3.0 /usr/local/hadoop-2.3.0
 RUN ln -s /usr/local/hadoop-2.3.0 $HADOOP_HOME
@@ -174,5 +174,5 @@ RUN cd /opt/edx-analytics-data-api ; make develop ; ./manage.py migrate --noinpu
 EXPOSE 8000
 
 # global loop script
-ADD services/start-analytics.sh ./start-analytics.sh
-#CMD ["/bin/bash", "/start-analytics.sh"]
+ADD services/start-edx-analytics.sh ./start-edx-analytics.sh
+#CMD ["/bin/bash", "/start-edx-analytics.sh"]
