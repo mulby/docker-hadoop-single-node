@@ -55,13 +55,13 @@ ENV HIVE_HOME /opt/hive-0.11.0-bin
 ENV PATH $HIVE_HOME/bin:$PATH
 ENV SQOOP_HOME /usr/lib/sqoop
 ENV SQOOP_LIB $SQOOP_HOME/lib
-RUN bash -c build-edx-anaytics-pipeline.sh
+RUN bash -c /tmp/build-edx-analytics-pipeline.sh
 
 # Build edx-analytics-data-api
-RUN bash -c build-edx-anaytics-data-api.sh
+RUN bash -c /tmp/build-edx-analytics-data-api.sh
 
 # Build edx-insights
-RUN bash -c build-edx-insights.sh
+RUN bash -c /tmp/build-edx-insights.sh
 
 # HDFS ports (50070 50470 9000 50075 50475 50010 50020 50090)
 # YARN ports (8088 8032 50060)
