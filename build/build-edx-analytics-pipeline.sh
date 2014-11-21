@@ -7,7 +7,6 @@ function DBG {
 DBG "Starting"
 
 apt-get install -y git python-pip python-dev tmux mysql-server-5.6
-service mysql start
 cd /opt
 git clone -b gabe/docker-experiment https://github.com/edx/edx-analytics-pipeline
 cd edx-analytics-pipeline
