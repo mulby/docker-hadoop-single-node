@@ -47,7 +47,7 @@ ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/lib
 # Copy start-hadoop script
 ADD services/start-hadoop.sh ./start-hadoop.sh
 #RUN mv ./start-hadoop.sh /usr/local/hadoop/bin/start-hadoop.sh
-ADD packages/hadoop-2.3.0.tar.gz
+ADD packages/hadoop-2.3.0.tar.gz /hadoop-2.3.0.tar.gz
 ADD build/build-hadoop.sh /tmp/
 RUN bash -c /tmp/build-hadoop.sh
 
