@@ -170,9 +170,15 @@ RUN rm -rf ./mysql-connector-java-5.1.29*
 RUN git -C /opt clone https://github.com/edx/edx-analytics-data-api
 RUN cd /opt/edx-analytics-data-api ; make develop ; ./manage.py migrate --noinput ; ./manage.py migrate --noinput --database=analytics ; ./manage.py set_api_key edx edx
 
-# data api port
-EXPOSE 8000
+# Build edx-insights
+RUN git -C /tmp clone https://github.com/edx/djeventstream ; cd /tmp/djeventstream ; python setup.py install ; rm -rf /tmp/djeventstream
+RUN git -C /tmp clone https://github.com/edx/loghandlersplus ; cd /tmp/loghandlersplus ; python setup.py install ; rm -rf /tmp/loghandlersplus
+RUN apt-get -y install python-pip python-matplotlib python-scipy emacs mongodb apache2-utils python-mysqldb subversion ipython nginx git redis-server
+RUN git -C /opt clone https://github.com/edx/insights ; cd /opt/insights ; pip install -r requirements.txt ; cd src ; service mongodb start ; python manage.py syncdb ; python manage.py migrate
+
+# data api and insights ports
+EXPOSE 8000 9022
 
 # global loop script
 ADD services/start-edx-analytics.sh ./start-edx-analytics.sh
-#CMD ["/bin/bash", "/start-edx-analytics.sh"]
+CMD ["/bin/bash", "/start-edx-analytics.sh"]
