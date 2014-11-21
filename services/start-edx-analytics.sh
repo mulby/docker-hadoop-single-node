@@ -24,6 +24,8 @@ EOF
 su hduser -c "$HADOOP_HOME/bin/hdfs dfs -mkdir -p /edx-analytics-pipeline/output/"
 su hduser -c "$HADOOP_HOME/bin/hdfs dfs -mkdir -p /edx-analytics-pipeline/input/"
 su hduser -c "$HADOOP_HOME/bin/hdfs dfs -mkdir -p /edx-analytics-pipeline/packages/"
+su hduser -c "$HADOOP_HOME/bin/hdfs dfs -mkdir -p /data"
+su hduser -c "$HADOOP_HOME/bin/hdfs dfs -mkdir -p /tmp/luigi/partial/edx-analytics-pipeline/"
 su hduser -c "$HADOOP_HOME/bin/hdfs dfs -put ./local.json /edx-analytics-pipeline/output/local.json"
 su hduser -c "$HADOOP_HOME/bin/hdfs dfs -put ./lms.json /edx-analytics-pipeline/input/lms.json"
 su hduser -c "$HADOOP_HOME/bin/hdfs dfs -put /tmp/edx-analytics-hadoop-util.jar /edx-analytics-pipeline/packages/edx-analytics-hadoop-util.jar"
