@@ -30,11 +30,14 @@ RUN bash -c /tmp/build-openssh+hduser.sh
 ENV HADOOP_HOME /usr/local/hadoop
 ENV HADOOP_DATA /var/lib/hadoop
 # Export Hadoop environment variables
-ENV PATH $PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
+ENV HIVE_HOME /opt/hive-0.11.0-bin
+ENV SQOOP_HOME /usr/lib/sqoop
+ENV SQOOP_LIB $SQOOP_HOME/lib
 ENV HADOOP_MAPRED_HOME $HADOOP_HOME
 ENV HADOOP_COMMON_HOME $HADOOP_HOME
 ENV HADOOP_HDFS_HOME $HADOOP_HOME
 ENV YARN_HOME $HADOOP_HOME
+ENV PATH $PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$HIVE_HOME/bin
 # Configure HDFS
 ADD config/core-site.xml ./core-site.xml
 ADD config/hdfs-site.xml ./hdfs-site.xml
@@ -54,10 +57,6 @@ RUN bash -c /tmp/build-hadoop.sh
 
 # Build edx-analytics-pipeline (+ luigi conf)
 ADD config/luigi-client.cfg ./luigi-client.cfg
-ENV HIVE_HOME /opt/hive-0.11.0-bin
-ENV PATH $HIVE_HOME/bin:$PATH
-ENV SQOOP_HOME /usr/lib/sqoop
-ENV SQOOP_LIB $SQOOP_HOME/lib
 ADD build/build-edx-analytics-pipeline.sh /tmp/
 RUN bash -c /tmp/build-edx-analytics-pipeline.sh
 

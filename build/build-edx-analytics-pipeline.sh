@@ -6,11 +6,14 @@ function DBG {
 
 DBG "Starting"
 
-apt-get install -y git python-pip python-dev
+apt-get install -y git python-pip python-dev tmux mysql-server-5.6
+service mysql start
 cd /opt
 git clone -b gabe/docker-experiment https://github.com/edx/edx-analytics-pipeline
 cd edx-analytics-pipeline
 WHEEL_PYVER=2.7 WHEEL_URL=http://edx-wheelhouse.s3-website-us-east-1.amazonaws.com/Ubuntu/precise make system-requirements install
+cp config/docker.cfg override.cfg
+chown -R hduser:hadoop .
 
 # Configure LUIGI
 cd /
