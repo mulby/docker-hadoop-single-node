@@ -26,6 +26,7 @@ wget https://archive.apache.org/dist/hive/hive-0.11.0/hive-0.11.0-bin.tar.gz
 tar zxvf hive-0.11.0-bin.tar.gz
 mv ./hive-0.11.0-bin /opt
 rm -rf ./hive-0.11.0-bin*
+echo "export HIVE_HOME=$HIVE_HOME" >> /home/hduser/.bashrc
 
 # Build Sqoop
 cd /
@@ -33,6 +34,8 @@ wget http://www.carfab.com/apachesoftware/sqoop/1.4.5/sqoop-1.4.5.bin__hadoop-2.
 tar zxvf sqoop-1.4.5.bin__hadoop-2.0.4-alpha.tar.gz
 mv ./sqoop-1.4.5.bin__hadoop-2.0.4-alpha $SQOOP_HOME
 rm -rf ./sqoop-1.4.5.bin__hadoop-2.0.4-alpha*
+echo "export SQOOP_HOME=$SQOOP_HOME" >> /home/hduser/.bashrc
+echo "export SQOOP_LIB=$SQOOP_LIB" >> /home/hduser/.bashrc
 
 # Build mysql connector
 cd /
