@@ -8,10 +8,10 @@ DBG "Starting"
 
 # Setup Hadoop
 cd /
-if [ ! -f "hadoop-2.3.0.tar.gz" ]; then
+if [ ! -d "hadoop-2.3.0" ]; then
 	wget https://archive.apache.org/dist/hadoop/core/hadoop-2.3.0/hadoop-2.3.0.tar.gz
+	tar zxvf hadoop-2.3.0.tar.gz
 fi
-tar zxvf hadoop-2.3.0.tar.gz
 mv hadoop-2.3.0 /usr/local/hadoop-2.3.0
 ln -s /usr/local/hadoop-2.3.0 $HADOOP_HOME
 rm -rf hadoop-2.3.0*
