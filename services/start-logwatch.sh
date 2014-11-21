@@ -23,7 +23,9 @@ while [ true ]; do
 		((IDX++))
 	done
 	if [ $IDX -gt 0 ]; then
+		cd /opt/edx-analytics-pipeline
 		launch-task ImportCourseDailyFactsIntoMysql --local-scheduler --src hdfs://localhost:9000/data/ --dest hdfs://localhost:9000/edx-analytics-pipeline/enroll/ --lib-jar hdfs://localhost:9000/edx-analytics-pipeline/packages/edx-analytics-hadoop-util.jar --manifest hdfs://localhost:9000/edx-analytics-pipeline/manifest/enroll.manifest --n-reduce-tasks 1 --name enroll --overwrite
+		cd "$WATCHDIR"
 	fi
 	sleep 1
 	echo "."
