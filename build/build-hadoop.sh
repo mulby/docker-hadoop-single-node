@@ -56,11 +56,11 @@ cd /
 wget https://github.com/apache/hadoop-common/archive/release-2.3.0.tar.gz
 mv release-2.3.0.tar.gz hadoop-common-release-2.3.0.tar.gz
 tar zxvf hadoop-common-release-2.3.0.tar.gz
-cd hadoop-common-release-2.3.0/hadoop-common-project ; mvn package -X -Pnative -DskipTests
+cd /hadoop-common-release-2.3.0/hadoop-common-project ; mvn package -X -Pnative -DskipTests
 mv $HADOOP_HOME/lib/native/libhadoop.a $HADOOP_HOME/lib/native/libhadoop32.a
 mv $HADOOP_HOME/lib/native/libhadoop.so $HADOOP_HOME/lib/native/libhadoop32.so
 mv $HADOOP_HOME/lib/native/libhadoop.so.1.0.0 $HADOOP_HOME/lib/native/libhadoop32.so.1.0.0
-cd hadoop-common-release-2.3.0/hadoop-common-project/hadoop-common/target/native/target/usr/local/lib ; \
+cd /hadoop-common-release-2.3.0/hadoop-common-project/hadoop-common/target/native/target/usr/local/lib ; \
 	mv libhadoop.a $HADOOP_HOME/lib/native/libhadoop.a ; \
 	mv libhadoop.so $HADOOP_HOME/lib/native/libhadoop.so ; \
 	mv libhadoop.so.1.0.0 $HADOOP_HOME/lib/native/libhadoop.so.1.0.0
